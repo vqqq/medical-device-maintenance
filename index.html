@@ -1,0 +1,314 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>医疗器械维护管理</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 20px;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    h2 {
+      color: #2d3748;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border: 1px solid #e2e8f0;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #edf2f7;
+      color: #4a5568;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #f7fafc;
+    }
+
+    button {
+      padding: 8px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .add-btn {
+      background-color: #3182ce;
+      color: white;
+    }
+
+    .edit-btn {
+      background-color: #38a169;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #e53e3e;
+      color: white;
+    }
+
+    .cancel-btn {
+      background-color: #a0aec0;
+      color: white;
+    }
+
+    .search-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start !important;
+      gap: 10px;
+    }
+
+    .search-container input {
+      padding: 8px;
+      width: 250px !important;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    #deviceModal,
+    #deviceDeleteModal {
+      z-index: 1000;
+    }
+
+    #recordModal,
+    #recordDeleteModal {
+      z-index: 2000;
+    }
+
+    #alertModal {
+      z-index: 5000;
+    }
+    .device-modal-content,
+    .device-delete-modal-content,
+    .record-modal-content,
+    .record-delete-modal-content,
+    .alert-modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .device-modal-content input,
+    .record-modal-content input,
+    .record-modal-content textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .record-modal-content textarea {
+      height: 100px;
+      resize: none;
+    }
+
+    .device-modal-content input:focus,
+    .record-modal-content input:focus,
+    .record-modal-content textarea:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+    }
+
+    .device-modal-content h3,
+    .device-delete-modal-content h3,
+    .record-modal-content h3,
+    .record-delete-modal-content h3,
+    .alert-modal-content h3 {
+      margin: 0 0 15px;
+      color: #2d3748;
+    }
+
+    .device-delete-modal-content,
+    .record-delete-modal-content,
+    .alert-modal-content {
+      text-align: center;
+    }
+
+    .device-delete-modal-content p,
+    .record-delete-modal-content p,
+    .alert-modal-content p {
+      margin: 10px 0 20px;
+      color: #4a5568;
+    }
+
+    .device-modal-content div,
+    .device-delete-modal-content div,
+    .record-modal-content div,
+    .record-delete-modal-content div,
+    .alert-modal-content div {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .record-table-container {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .record-table-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .record-table-container::-webkit-scrollbar-track {
+      background: #edf2f7;
+      border-radius: 3px;
+    }
+
+    .record-table-container::-webkit-scrollbar-thumb {
+      background: #a0aec0;
+      border-radius: 3px;
+    }
+
+    .record-table-container::-webkit-scrollbar-thumb:hover {
+      background: #718096;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>医疗器械维护管理</h2>
+  <div>
+    <button onclick="openAddDeviceModal()" class="add-btn">添加设备</button>
+  </div>
+  <div class="search-container">
+    <input id="deviceSearchInput" placeholder="搜索设备名称、型号或维护信息">
+    <button onclick="clearDeviceSearch()" class="cancel-btn">清空</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>设备名称</th>
+        <th>型号</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody id="deviceTableBody"></tbody>
+  </table>
+
+  <!-- 添加/编辑设备模态窗口 -->
+  <div id="deviceModal" class="modal">
+    <div class="device-modal-content">
+      <h3 id="deviceModalTitle"></h3>
+      <input id="deviceId" type="hidden">
+      <label>设备名称:</label>
+      <input id="deviceName" placeholder="设备名称">
+      <label>型号:</label>
+      <input id="deviceModel" placeholder="型号">
+      <div>
+        <button onclick="saveDevice()" class="add-btn">保存</button>
+        <button onclick="closeDeviceModal()" class="cancel-btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除设备确认模态窗口 -->
+  <div id="deviceDeleteModal" class="modal">
+    <div class="device-delete-modal-content">
+      <h3>确认删除</h3>
+      <p>确定要删除该设备及其所有维护记录吗？</p>
+      <div>
+        <button onclick="confirmDeviceDelete()" class="delete-btn">确定</button>
+        <button onclick="closeDeleteDeviceModal()" class="cancel-btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加/编辑维护记录模态窗口 -->
+  <div id="recordModal" class="modal">
+    <div class="record-modal-content">
+      <h3 id="recordModalTitle"></h3>
+      <input id="recordDeviceId" type="hidden">
+      <input id="recordId" type="hidden">
+      <label>维护日期:</label>
+      <input id="recordDate" placeholder="YYYY-MM-DD">
+      <label>维护详情:</label>
+      <textarea id="recordDetails" placeholder="请输入维护详情"></textarea>
+      <div>
+        <button onclick="saveRecord()" class="add-btn">保存</button>
+        <button onclick="closeRecordModal()" class="cancel-btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除维护记录确认模态窗口 -->
+  <div id="recordDeleteModal" class="modal">
+    <div class="record-delete-modal-content">
+      <h3>确认删除</h3>
+      <p>确定要删除该维护记录吗？</p>
+      <div>
+        <button onclick="confirmRecordDelete()" class="delete-btn">确定</button>
+        <button onclick="closeDeleteRecordModal()" class="cancel-btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 警告模态窗口 -->
+  <div id="alertModal" class="modal">
+    <div class="alert-modal-content">
+      <h3>提示</h3>
+      <p id="alertMessage"></p>
+      <div>
+        <button onclick="closeAlertModal()" class="add-btn">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+
+</html>

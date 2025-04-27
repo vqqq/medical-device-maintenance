@@ -1,0 +1,16 @@
+{
+  "name": "medical-device-maintenance",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["medical", "device", "maintenance"],
+  "author": "Han Zhang",
+  "license": "ISC",
+  "description": "A medical device maintenance management platform",
+  "devDependencies": {
+    "electron": "^35.1.5"
+  }
+}
